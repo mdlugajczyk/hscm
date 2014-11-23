@@ -13,15 +13,32 @@ data  Expression = Symbol String
                 | Vector Expression
                 | List [Expression]
                 | DottedPair [Expression] Expression
-                  deriving (Show, Eq)
+                  deriving (Eq)
+
+showExpression :: Expression -> String
+showExpression (Symbol s) = s
+showExpression (Number n) = show n
+showExpression (Character c) = show c
+showExpression (String s) = "\"" ++ s ++ "\""
+showExpression (Bool True) = "#t"
+showExpression (Bool False) = "#f"
+showExpression (Vector _) = undefined
+showExpression (List exprs) = "(" ++ showListContent exprs ++ ")"
+showExpression (DottedPair exprs e) = "(" ++ showListContent exprs ++ " . " ++ show e ++ show ")"
+
+showListContent :: [Expression] -> String
+showListContent = unwords . map show
+
+instance Show Expression where
+  show = showExpression
 
 symbol :: Parser Char
 symbol = oneOf "!#$%&|*+-/:<=>?@^_~"
 
 readExpr :: String -> String
 readExpr input = case parse parseExpr "lisp" input of
-                   Left err -> "No match: " ++ show err
-                   Right val -> "Found value" ++ show val
+                   Left err -> "Invalid expression: " ++ show err
+                   Right val -> "Found value " ++ show val
 
 parseExpr :: Parser Expression
 parseExpr = parseSpaces >>
