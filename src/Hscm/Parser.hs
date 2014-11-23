@@ -18,7 +18,10 @@ data  Expression = Symbol String
 showExpression :: Expression -> String
 showExpression (Symbol s) = s
 showExpression (Number n) = show n
-showExpression (Character c) = show c
+showExpression (Character c) = "#\\" ++ showCharacter c
+    where showCharacter ' ' = "space"
+          showCharacter '\n' = "newline"
+          showCharacter c' = [c']
 showExpression (String s) = "\"" ++ s ++ "\""
 showExpression (Bool True) = "#t"
 showExpression (Bool False) = "#f"
