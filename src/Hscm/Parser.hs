@@ -38,10 +38,10 @@ instance Show Expression where
 symbol :: Parser Char
 symbol = oneOf "!#$%&|*+-/:<=>?@^_~"
 
-readExpr :: String -> String
-readExpr input = case parse parseExpr "lisp" input of
-                   Left err -> "Invalid expression: " ++ show err
-                   Right val -> "Found value " ++ show val
+readExpr :: String -> Expression
+readExpr input = case parse parseExpr "" input of
+                   Left err -> String $ "Invalid expression: " ++ show err
+                   Right val -> val
 
 parseExpr :: Parser Expression
 parseExpr = parseSpaces >>

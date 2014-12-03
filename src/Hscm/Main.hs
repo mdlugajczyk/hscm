@@ -1,7 +1,6 @@
 import System.Environment
 import Hscm.Parser
+import Hscm.Evaluate
 
 main :: IO ()
-main = do
-  args <- getArgs
-  putStrLn $ readExpr $ args !! 0
+main = getArgs >>= print . eval .readExpr . head
